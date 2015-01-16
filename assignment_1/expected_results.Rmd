@@ -5,6 +5,12 @@ date: "January 15, 2015"
 output: html_document
 ---
 
+You will want to set the path to the folder where the data is. As in:
+
+```{r}
+setwd("~/Code/r_programming/assignment_1/")
+```
+
 ```{r}
 source("pollutantmean.R")
 pollutantmean("specdata", "sulfate", 1:10)
