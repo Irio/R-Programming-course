@@ -17,6 +17,8 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
             paste("00", as.character(monitor_id), sep = "")
         } else if(monitor_id < 100) {
             paste("0", as.character(monitor_id), sep = "")
+        } else {
+            monitor_id
         }
         file_dir <- paste(directory, "/", monitor, ".csv", sep = "")
         data <- read.csv(file_dir)
