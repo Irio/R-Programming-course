@@ -12,29 +12,13 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
     ## Return the mean of the pollutant across all monitors list
     ## in the 'id' vector (ignoring NA values)
     
+    source("readers.R")
+    
     read_monitor <- function(monitor_id) {
-        monitor <- if(monitor_id < 10) {
-            paste("00", as.character(monitor_id), sep = "")
-        } else if(monitor_id < 100) {
-            paste("0", as.character(monitor_id), sep = "")
-        } else {
-            monitor_id
-        }
-        file_dir <- paste(directory, "/", monitor, ".csv", sep = "")
-        data <- read.csv(file_dir)
-        values_for_pollutant <- data[, pollutant]
-        values_for_pollutant[!is.na(values_for_pollutant)]
+        data <- monitor_data(directory, monitor_id)
+        filtered_dataset <- data[, pollutant]
+        filtered_dataset[complete.cases(filtered_dataset)]
     }
     
-    read_monitors <- function(remaining_ids) {
-        if (length(remaining_ids) == 1) {
-            read_monitor(remaining_ids[1])
-        } else {
-            complete_tail <- tail(remaining_ids, length(remaining_ids) - 1)
-            list <- c(read_monitor(remaining_ids[1]), read_monitors(complete_tail))
-            list
-        }
-    }
-    
-    mean(read_monitors(id))
+    mean(monitors_data_c(id, read_monitor))
 }

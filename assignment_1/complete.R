@@ -14,27 +14,17 @@ complete <- function(directory, id = 1:332) {
     ## number of complete cases
     
     read_monitor <- function(monitor_id) {
-        monitor <- if(monitor_id < 10) {
-            paste("00", as.character(monitor_id), sep = "")
-        } else if(monitor_id < 100) {
-            paste("0", as.character(monitor_id), sep = "")
-        } else {
-            monitor_id
-        }
-        file_dir <- paste(directory, "/", monitor, ".csv", sep = "")
-        data <- read.csv(file_dir)
-        
+        data <- monitor_data(directory, monitor_id)
         appearences <- nrow(data[complete.cases(data), ])
         as.data.frame(list("id" = monitor_id, "nobs" = appearences))
     }
     
     read_monitors <- function(remaining_ids) {
-        if (length(remaining_ids) == 1) {
+        if (length(remaining_ids) == 1)
             read_monitor(remaining_ids[1])
-        } else {
+        else {
             complete_tail <- tail(remaining_ids, length(remaining_ids) - 1)
-            list <- rbind(read_monitor(remaining_ids[1]), read_monitors(complete_tail))
-            list
+            rbind(read_monitor(remaining_ids[1]), read_monitors(complete_tail))
         }
     }
     
