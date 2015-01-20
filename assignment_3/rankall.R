@@ -19,16 +19,16 @@ rankall <- function(outcome, num = "best") {
     wo_nas <- data[!is.na(data[outcome_column]), ]
     
     ordered_hospitals <- wo_nas[order(wo_nas$State, wo_nas[outcome_column], wo_nas$Hospital.Name), ]
-    index <- if (num == "best")
-        1
-    else if (num == "worst") # ??????????????
-        #nrow(ordered_hospitals)
-        #max(tapply(wo_nas$Hospital.Name, ordered_hospitals$State, length))
-    else
-        num
+    index <- function(data_table)
+        if (num == "best")
+            data_table[1]
+        else if (num == "worst")
+            tail(data_table, 1)
+        else
+            data_table[num]
     
     f <- ordered_hospitals[, c(outcome_column, "Hospital.Name", "State")]
-    g <- aggregate(f, list(State = f$State), FUN = function(x) x[index])[, c("Hospital.Name", "State")]
+    g <- aggregate(f, list(State = f$State), FUN = index)[, c("Hospital.Name", "State")]
     names(g) <- c("hospital", "state")
     g
 }
