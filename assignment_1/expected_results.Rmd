@@ -1,5 +1,5 @@
 ---
-title: "Excepted Results"
+title: "Expected Results"
 author: "Irio Musskopf"
 date: "January 15, 2015"
 output: html_document
